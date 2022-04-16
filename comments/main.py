@@ -12,7 +12,7 @@ potato = 3
 brussel_sprout = 7
 leek = 2
 
-sum_one_each = broccoli + potato + brussel_sprout+leek
+sum_one_each = broccoli + potato + brussel_sprout + leek
 avg_price = sum_one_each / 4 #calulating the average price
 # setting how many pieces of each product we will buy 
 num_potatoes = 7

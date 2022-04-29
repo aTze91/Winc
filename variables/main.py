@@ -4,8 +4,6 @@ __human_name__ = 'variables'
 
 # Add your code after this line
 
-
-
-name ='marco'
+name = 'marco'
 age = 31
 cool = True

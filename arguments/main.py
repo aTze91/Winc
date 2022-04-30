@@ -6,7 +6,7 @@ __human_name__ = 'arguments'
 
 
 def greet(name='Gigi', template='Hello, <name>!'):
-    template = template[0:template.find('<')] + name + template[template.find('>') + 1:]
+    template = template.replace('<name>', name)
     return template
 
 
@@ -35,3 +35,4 @@ if __name__ == "__main__":
     print(greet('gianni', 'Whats up, <name>!'))
     print(force(10))
     print(pull(800, 1500, 3))
+    print(dir(pull))

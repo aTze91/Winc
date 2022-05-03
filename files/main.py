@@ -2,10 +2,9 @@ __winc_id__ = "ae539110d03e49ea8738fd413ac44ba8"
 __human_name__ = "files"
 import os
 from zipfile import ZipFile
-
-
+path = f'{os.getcwd()}\\cache'
+print(os.getcwd())
 def clean_cache():
-    path = 'c:/Users/marco/Winc/files/cache'  # I would like to generalize the string path using os.getcwd(),but in order to do it i need to run VS directly from the dir \files, in that case I cant use wimpcy check.
     if os.path.isdir(path) is False:
         os.mkdir(path)
     else:
@@ -13,7 +12,6 @@ def clean_cache():
         for x in files:
             os.remove(f'{path}/{x}')
     return None
-
 
 def cache_zip(file_path, dir_path):
     clean_cache()
@@ -24,9 +22,9 @@ def cache_zip(file_path, dir_path):
 
 def cached_files():
     my_list = []
-    for x in os.listdir('C:\\Users\\marco\\Winc\\files\\cache'):
-        if os.path.isfile(f'C:\\Users\\marco\\Winc\\files\\cache\\{x}'):
-            my_list += [f'C:\\Users\\marco\\Winc\\files\\cache\\{x}']
+    for x in os.listdir(path):
+        if os.path.isfile(f'{path}\\{x}'):
+            my_list += [f'{path}\\{x}']
     return my_list
 
 

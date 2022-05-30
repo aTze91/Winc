@@ -49,23 +49,33 @@ print("Alfred's contracts:", alfred_contracts)
 print("Bert's contracts:", bert_contracts)
 print("Candice's contracts:", candice_contracts)
 '''
-class Person():
-    def __init__(self.name):
-        pass
 
-class Specialist(Person):
-    def __init__(self, profession):
-        super().__init__()
-        self.profession = profession
+
+class Specialist():
+    def __init__(self, name, professions):
+        self.name = name
+        if type(professions) is dict:
+            self.professions = professions
+        else:
+            raise TypeError('profession must be a dict')
     pass
 
-class Homeowner(Person):
-    def __init__(self, address, needs):
-        super().__init__()
+
+class Homeowner():
+    def __init__(self, name, address, needs):
+        self.name = name
         self.address = address
         self.needs = needs
-    
 
-    def contracts(self):
-        
+    def contracts(self, specialists):
+        if type(specialists) != list:
+            raise TypeError("specialists must be a list of Specialist")
+        best_contracts = {}
+        for need in self.needs:
+            possible_contracts = {}
+            for specialist in specialists:
+                if need in specialist.professions:
+                    possible_contracts[specialist.name] = specialist.professions[need]    
+            best_contracts[need] = max(possible_contracts, key=possible_contracts.get)
+        return best_contracts
     pass

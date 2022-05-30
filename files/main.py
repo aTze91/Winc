@@ -13,6 +13,7 @@ def clean_cache():
             os.remove(f'{path}/{x}')
     return None
 
+
 def cache_zip(file_path, dir_path):
     clean_cache()
     my_zip = ZipFile(file_path)

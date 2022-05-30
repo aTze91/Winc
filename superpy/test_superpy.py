@@ -22,14 +22,14 @@ with open(inventory.path, 'r', newline='') as csvfile:
     for row in test_reader:
         rows += [row]
     csvfile.close()
-assert [1, 'broccoli', '2022-05-23', 2.3, 4.5, 20.0] == rows[1]
-assert [0.0, 'eggs', '2022-05-04', 2.8, 5.6, 14.0] == rows[0]
+assert [2, 'broccoli', '2022-05-23', 2.3, 4.5, 20.0] == rows[1]
+assert [1, 'eggs', '2022-05-04', 2.8, 5.6, 14.0] == rows[0]
 
 # testing set_date
 
 inventory.set_date('2022-05-22')
-test_product_0 = inventory.get_product(0)
-test_product_1 = inventory.get_product(1)
+test_product_0 = inventory.get_product(1)
+test_product_1 = inventory.get_product(2)
 
 assert inventory.today == '2022-05-22'
 assert test_product_1.today == '2022-05-22'
@@ -44,11 +44,11 @@ assert test_product_1.is_expired() is False
 
 inventory.sell(1, 8)
 test_product = inventory.get_product(1)
-assert test_product.quantity == 12
+assert test_product.quantity == 6
 inventory.set_date()
 
 # testing revenue
-assert inventory.revenue('2021-04-20', inventory.today)["description"] == '8.0 sold products for a total value of 36.0'
+assert inventory.revenue('2021-04-20', inventory.today)["description"] == '8.0 sold products for a total value of 44.8'
 
 # testing if clean_inventory leaves the inventory with no products
 

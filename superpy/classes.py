@@ -94,14 +94,14 @@ class Inventory():
                 in_stock = True
                 id = product.id
                 new_quantity = product.quantity + quantity
-                self.replace_product(Product(id, name, expiring_date, buy_price, sell_price, new_quantity, self.today))
+                self.replace_product(Product(id, name.lower, expiring_date, buy_price, sell_price, new_quantity, self.today))
         if in_stock is False:
             id = self.len() + 1
-            product = Product(id, name, expiring_date, buy_price, sell_price, quantity, self.today)
+            product = Product(id, name.lower, expiring_date, buy_price, sell_price, quantity, self.today)
             self.products.append(product)
             row = [product.id, product.name, product.expiring_date, product.buy_price, product.sell_price, product.quantity]
             self.write_on_csv(self.path, row)
-        row = ['buy', name, buy_price, quantity, self.today, id]
+        row = ['buy', name.lower, buy_price, quantity, self.today, id]
         self.write_on_csv(self.record_path, row) # add a new row to the file record
 
     def sell(self, id, quantity=1):  # reduces the quantity of the corresponding product
@@ -111,7 +111,7 @@ class Inventory():
         else:
             product.quantity -= quantity
             self.replace_product(product)
-            row = ['sell', product.name, product.sell_price, quantity, self.today, product.id]
+            row = ['sell', product.name.lower, product.sell_price, quantity, self.today, product.id]
             self.write_on_csv(self.record_path, row)
 
     def report(self, key, from_date, to_date): # returns a dict that can contain diffent data based on the given key and save the same data on a csv file
@@ -144,6 +144,7 @@ class Inventory():
             for product in report_data['products']:
                 rows.append([report_data['products'][product]['name'], report_data['products'][product]['quantity'], report_data['products'][product]['value']])
         if rows:
+            self.write_on_csv(report_path,f"report of: {self.today}" )
             for row in rows:
                 self.write_on_csv(report_path, row)
         return report_data
@@ -284,7 +285,7 @@ class Product():
 
     def __init__(self, id, name, expiring_date, buy_price, sell_price, quantity, today):
         self.id = id
-        self.name = name
+        self.name = name.lower
         self.expiring_date = expiring_date
         self.buy_price = buy_price
         self.sell_price = sell_price

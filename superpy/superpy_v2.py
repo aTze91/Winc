@@ -1,4 +1,3 @@
-# Imports
 import parser_help as h
 from classes import Inventory
 import argparse as ap
@@ -71,42 +70,45 @@ def main():
         
 
     parser = ap.ArgumentParser(description='Manage inventories', formatter_class=ap.RawTextHelpFormatter)
-    command_group = parser.add_mutually_exclusive_group()
+    subparsers = parser.add_subparsers()
     parser.add_argument('name', type=str, help=h.name)
-    command_group.add_argument('-b', '--buy', action='store_true', help=h.b)
-    command_group.add_argument('-s', '--sell', action='store_true', help=h.s)
-    command_group.add_argument('-r', '--report', action='store_true', help=h.rep)
-    command_group.add_argument('-sd', '--set-date', action='store_true', help=h.sd)
-    command_group.add_argument('-a', '--advance', action='store_true', help=h.a)
-    command_group.add_argument('-c', '--clean', action='store_true', help=h.c)
-    command_group.add_argument('-i', '--inventory', action='store_true', help=h.i)
-    parser.add_argument('--r', type=str, dest='r', choices=['expired', 'movements', 'revenue', 'expenses', 'profits', 'all'], default='all', help=h.r)
-    parser.add_argument('--product-name', type=str, dest='p_name', help=h.pname)
-    parser.add_argument('--expiration-date', type=str, dest='exp_date', help=h.exp)
-    parser.add_argument('--buy-price', type=float, dest='buy_price', help=h.bprice)
-    parser.add_argument('--sell-price', type=float, dest='sell_price', help=h.sprice)
-    parser.add_argument('--quantity', type=int, dest='quantity', help=h.quant)
-    parser.add_argument('--product-id', type=int, dest='p_id', help=h.id)
-    parser.add_argument('--from', type=str, dest='from_date', help=h.to)
-    parser.add_argument('--to', type=str, dest='to_date', help=h.to)
-    parser.add_argument('--step', type=int, dest='step', default=1, help=h.id)
+    subparsers = parser.add_subparsers(dest='command')
+    buy = subparsers.add_parser('-b', '--buy', action='store_true', help=h.b)
+    sell = subparsers.add_parser('-s', '--sell', action='store_true', help=h.s)
+    report = subparsers.add_parser('-r', '--report', action='store_true', help=h.rep)
+    set_date = subparsers.add_parser('-sd', '--set-date', action='store_true', help=h.sd)
+    advance = subparsers.add_parser('-a', '--advance', action='store_true', help=h.a)
+    parser.add_argument('-c', '--clean', action='store_true', help=h.c)
+    parser.add_argument('-i', '--inventory', action='store_true', help=h.i)
+    report.add_argument('--r', type=str, dest='r', choices=['expired', 'movements', 'revenue', 'expenses', 'profits', 'all'], default='all', help=h.r)
+    buy.add_argument('--product-name', type=str, dest='p_name', help=h.pname)
+    buy.add_argument('--expiration-date', type=str, dest='exp_date', help=h.exp)
+    buy.add_argument('--buy-price', type=float, dest='buy_price', help=h.bprice)
+    buy.add_argument('--sell-price', type=float, dest='sell_price', help=h.sprice)
+    buy.add_argument('--quantity', type=int, dest='quantity', help=h.quant)
+    sell.add_argument('--quantity', type=int, dest='quantity', help=h.quant)
+    sell.add_argument('--product-id', type=int, dest='p_id', help=h.id)
+    report.add_argument('--from', type=str, dest='from_date', help=h.to)
+    report.add_argument('--to', type=str, dest='to_date', help=h.to)
+    set_date.add_argument('--to', type=str, dest='to_date', help=h.to)
+    advance.add_argument('--step', type=int, dest='step', default=1, help=h.id)
     args = parser.parse_args()
     inventory = Inventory(args.name)
-    if args.buy:
+    if args.command.buy:
         if args.p_name.lower() and args.exp_date and args.buy_price and args.sell_price and args.quantity:
             inventory.buy(args.p_name.lower(), args.exp_date, args.buy_price, args.sell_price, args.quantity)
         else:
             print('ERROR: missing arguments!!!')
             print('Correct sintax: superpy.py <inventory-name> --buy --product-name <product-name> --expiration-date <date> --buy-price <buy-price> --sell-price <sell-price> --quantity <quantity>')
-    elif args.sell:
+    elif args.command.sell:
         if args.p_id and args.quantity:
             inventory.sell(args.p_id, args.quantity)
         else:
             print('ERROR: missing arguments!!!')
             print('Correct sintax: superpy.py <inventory-name> --sell --product-id <product-id> --quantity <quantity>')
-    elif args.set_date:
+    elif args.command.set_date:
         inventory.set_date(args.to_date)
-    elif args.report:
+    elif args.command.report:
         if args.r == 'expired':
             show_expired()
         elif args.r == 'movements':
@@ -126,7 +128,7 @@ def main():
             plt.show()
         else:
             print('ERROR: comand not found')
-    elif args.inventory:
+    elif args.command.inventory:
         rows = []
         for product in inventory.products:
             rows.append([product.id, product.name, product.expiring_date, product.buy_price, product.sell_price, product.quantity])
@@ -134,7 +136,7 @@ def main():
         print_table(columns, rows, f'{inventory.name.upper()}    DATE: {inventory.today.upper()}')
     elif args.clean:
         inventory.clean()
-    elif args.advance:
+    elif args.command.advance:
         inventory.advance_date(args.step)
     pass
 

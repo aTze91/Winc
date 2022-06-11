@@ -1,0 +1,14 @@
+"buy"|"<built-in method lower of str object at 0x00000296CB7FC970>"|2.4|10|"2022-06-10"|1
+"buy"|"<built-in method lower of str object at 0x0000016547D87BF0>"|2.4|10|"2022-06-10"|1
+"buy"|"<built-in method lower of str object at 0x0000024A2ECAC970>"|2.4|10|"2022-06-10"|2
+"buy"|"<built-in method lower of str object at 0x000001CF3F697E70>"|2.4|10|"2022-06-10"|3
+"buy"|"<built-in method lower of str object at 0x000001D6893386B0>"|2.4|10|"2022-06-10"|4
+"buy"|"pane"|2.4|10|"2022-06-10"|5
+"buy"|"pane"|2.4|10|"2022-06-10"|5
+"buy"|"pane"|2.4|10|"2022-06-10"|1
+"sell"|"pane"|4.3|2|"2022-06-10"|1
+"buy"|"Pane"|2.4|10|"2022-06-10"|2
+"buy"|"Pane"|2.4|10|"2022-06-10"|1
+"buy"|"pane"|2.4|10|"2022-06-10"|2
+"buy"|"pane"|2.4|10|"2022-06-10"|1
+"buy"|"pane"|2.4|10|"2022-06-10"|1

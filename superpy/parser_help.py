@@ -1,13 +1,13 @@
-name = "select wich inventary to manage,\n\
-in case the inventary doesn't exist a new one will be created."
+name = "select wich inventory to manage,\n\
+in case the inventory doesn't exist a new one will be created."
 i = "display the products in stock"
 b = " require arguments : --product-name --expiration-date --buy-price --sell-price -quantity'\n\
-add a product to the inventatry,if the product already exists his quantity will be increased"
+add a product to the inventory,if the product already exists his quantity will be increased"
 s = "require arguments : --product-id --quantity' , decrease the quantity of one product"
 sd = "change the date that superpy perceives as today\nadditional arguments: --from,--to"
 a = "advance the date that superpy perceives as today\nadditional arguments: --step"
 rep = " display report data and create a csv file containing the that data\nadditional arguments: --r, --from, --to"
-c = "remove all the products by the inventary"
+c = "remove all the products by the inventory"
 pname = 'product name'
 exp = 'expiration date the format must be Y-m-d'
 bprice = 'price of the product when you buy it'

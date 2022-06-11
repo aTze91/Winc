@@ -70,7 +70,6 @@ def main():
         
 
     parser = ap.ArgumentParser(description='Manage inventories', formatter_class=ap.RawTextHelpFormatter)
-    subparsers = parser.add_subparsers()
     parser.add_argument('name', type=str, help=h.name)
     subparsers = parser.add_subparsers(dest='command')
     buy = subparsers.add_parser('-b', '--buy', action='store_true', help=h.b)

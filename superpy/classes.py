@@ -19,14 +19,16 @@ class Inventory():
         print(f'Searching for {self.name}....')
         if os.path.exists(self.path):  # if the inventary files already exist we recover the contained data
             print(f'{self.name} found!')
-            with open(self.today_path, 'r', newline='') as today_file:
+            # here we the recover the today date and the creation date stored in the file today.txt
+            with open(self.today_path, 'r', newline='') as today_file:                                                         
                 dates = today_file.readline().split(sep='|')
                 self.today = dates[0]
                 self.creation_date = dates[1]
+            # then we create a list of Product instances to store into self.products
             for i in range(1, self.len() +1):
                 product = self.get_product(i)
                 self.products.append(product)
-        else: # if they don't exists we create a new ones
+        else: # if the inventary files don't exists we create a new inventory
             print(f'{self.name} not found...')
             os.mkdir(self.dirpath)
             os.mkdir(self.report_dirpath)
@@ -78,19 +80,20 @@ class Inventory():
 
     def replace_product(self, new_product): # replaces the row that correspond to the id of the new product
         new_products = []
+        # here we create a list of Products that contains the replaced product  
         for product in self.products:
             if product.id == new_product.id:
                 new_products.append(new_product)
             else:
                 new_products.append(product)
-        self.clean()
-        for product in new_products:
+        self.clean() # we delete all the data from the .csv file where the products data is stored
+        for product in new_products:# we write the updated data into the .csv file 
             row = [product.id, product.name, product.expiring_date, product.buy_price, product.sell_price, product.quantity]
             self.write_on_csv(self.path, row)
 
     def buy(self, name, expiring_date, buy_price, sell_price, quantity):  # adds one product to the file inventory.csv,
         in_stock = False                                                  # if the product already exists, his quanity will be increased,                                           
-        for product in self.products:
+        for product in self.products: 
             if product.name == name and product.expiring_date == expiring_date:
                 print('in stock')
                 in_stock = True
@@ -114,7 +117,7 @@ class Inventory():
             product.quantity -= quantity
             self.replace_product(product)
             row = ['sell', product.name, product.sell_price, quantity, self.today, product.id]
-            self.write_on_csv(self.record_path, row)
+            self.write_on_csv(self.record_path, row) # add a new row to the file record
 
     def report(self, key, from_date, to_date, export): # returns a dict that can contain diffent data based on the given key and save the same data on a csv file
         if from_date is None:
@@ -283,7 +286,7 @@ class Inventory():
         return in_stock
     pass
 
-
+# we use Product instances to manage the data of single products 
 class Product():
 
     def __init__(self, id, name, expiring_date, buy_price, sell_price, quantity, today):
@@ -295,7 +298,7 @@ class Product():
         self.quantity = quantity
         self.today = today
 
-    def is_expired(self): # returns if the product i expired
+    def is_expired(self): # returns True if the product i expired, False if it doesn't
         if self.today > self.expiring_date:
             return True
         else:

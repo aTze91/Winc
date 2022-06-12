@@ -8,20 +8,20 @@ Here the commands:
 superpy.py <inventory-name> : will select wich inventory to manage, in case the inventary doesn't exist
                               a new one named <inventary-name> will be created.
 
-superpy.py <inventory-name> --inventory : to display the inventory as a table.
+superpy.py <inventory-name> inventory : to display the inventory as a table.
 
-superpy.py <inventory-name> --buy --product-name <product-name> --expiration-date <date> --buy-price <buy-price> --sell-price <sell-price> --quantity <quantity> :
+superpy.py <inventory-name> buy --product-name <product-name> --expiration-date <date> --buy-price <buy-price> --sell-price <sell-price> --quantity <quantity> :
                              : to add a product to the inventory.
 
-superpy.py <inventory-name> --sell --product-id <product-id> --quantity <quantity> : when a product is sold
+superpy.py <inventory-name> sell --product-id <product-id> --quantity <quantity> : when a product is sold
 
-superpy.py <inventory-name> --report --r expired : to get a report of all expired products
-superpy.py <inventory-name> --report --r movements --from <date> --to <date>: to get a report of all the buy\sell movements
-superpy.py <inventory-name> --report --r revenue --from <date> --to <date>: to get a report of the revenue
-superpy.py <inventory-name> --report --r expenses --from <date> --to <date>: to get a report of the expenses
-superpy.py <inventory-name> --report --r profits --from <date> --to <date>: to get a report of the profits
-superpy.py <inventory-name> --report --r all --from <date> --to <date>: to get expired, movements, revenue, expenses, profit report
-                                
+superpy.py <inventory-name> report --r expired : to get a report of all expired products
+superpy.py <inventory-name> report --r movements --from <date> --to <date>: to get a report of all the buy\sell movements
+superpy.py <inventory-name> report --r revenue --from <date> --to <date>: to get a report of the revenue
+superpy.py <inventory-name> report --r expenses --from <date> --to <date>: to get a report of the expenses
+superpy.py <inventory-name> report --r profits --from <date> --to <date>: to get a report of the profits
+superpy.py <inventory-name> report --r all --from <date> --to <date>: to get expired, movements, revenue, expenses, profit report
+You decide if to export the data adding the flag --exp <format>, for the moment you can decide between 'csv' or 'png'                       
 
 superpy.py <inventory-name> set-date --to <date> : to set the date that the application perceives as 'today'
 

@@ -1,9 +1,12 @@
+from numpy import append
 import parser_help as h
 from classes import Inventory
 import argparse as ap
 from rich import table as tb
 import rich
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
+import numpy as np
+
 
 # Do not change these lines.
 __winc_id__ = "a2bc36ea784242e4989deb157d527ba0"
@@ -24,6 +27,12 @@ def main():
                 str_row.append(str(value))
             table.add_row(*str_row)
         rich.print(table)
+    
+    def show_plot(x,y):
+        #plt.style.use('_mpl-gallery')
+        # plot
+        
+        pass
 
     # this function wrap the data tha we get from inventory.report() into columns and rows,
     # then calls print_table() 
@@ -52,6 +61,8 @@ def main():
     # then calls print_table()
     def show_revenue():
         rows = []
+        x = []
+        y = []
         data = inventory.report('revenue', args.from_date, args.to_date, args.exp)
         columns = ['NAME', 'QUANTITY', 'VALUE']
         for product in data['products']:
@@ -71,13 +82,15 @@ def main():
     # this function wrap the data tha we get from inventory.report() into columns and rows,
     # then calls print_table() 
     def show_profits():
+        x = []
+        y = []
         rows = []
         data = inventory.report('profits', args.from_date, args.to_date, args.exp)
         columns = ['NAME', 'PROFIT']
         for product in data['products']:
-            rows.append([data['products'][product]['name'], data['products'][product]['profit']])
+            rows.append([data['products'][product]['name'], data['products'][product]['value']])
         print_table(columns, rows, data['description'].upper())
-        
+
 
     # here we define parser and the positonal argument 'name'    
     parser = ap.ArgumentParser(description='Manage inventories', formatter_class=ap.RawTextHelpFormatter)
@@ -95,7 +108,7 @@ def main():
     
     # here we add some arguments to the subparsers
     report_parser.add_argument('--r', type=str, dest='r', choices=['expired', 'movements', 'revenue', 'expenses', 'profits', 'all'], default='all', help=h.r)
-    report_parser.add_argument('--exp', action='store_true', help= h.export)
+    report_parser.add_argument('--exp', dest='exp', choices=['csv', 'png'], help= h.export)
     buy_parser.add_argument('--product-name', type=str, dest='p_name', help=h.pname)
     buy_parser.add_argument('--expiration-date', type=str, dest='exp_date', help=h.exp)
     buy_parser.add_argument('--buy-price', type=float, dest='buy_price', help=h.bprice)

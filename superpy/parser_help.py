@@ -34,4 +34,4 @@ r = ": with this flag you can specify what kind of report you want to create, hi
             'expenses': to get a report of the expenses\n\
             'profits': to get a report of the profits\n\
             'all': to get expired, movements, revenue, expenses, profit report.\n\n"
-export = ' add this flag if you want to export the report data into .csv files\n\n'
+export = ' add this flag if you want to export the report data into .csv or .png files\n\n'

@@ -2,6 +2,7 @@ import os
 from datetime import datetime as dt
 from datetime import timedelta
 import csv
+import matplotlib.pyplot as plt
 
 
 class Inventory():
@@ -119,7 +120,7 @@ class Inventory():
             row = ['sell', product.name, product.sell_price, quantity, self.today, product.id]
             self.write_on_csv(self.record_path, row) # add a new row to the file record
 
-    def report(self, key, from_date, to_date, export): # returns a dict that can contain diffent data based on the given key and save the same data on a csv file
+    def report(self, key, from_date, to_date, export): # returns a dict that can contain diffent data based on the given key and save the same data on csv and png files
         if from_date is None:
             from_date = self.creation_date
         if to_date is None:
@@ -129,7 +130,7 @@ class Inventory():
         report_data = {}
         if key == 'expired':
             report_data = self.expired_products()
-            if export:
+            if export == 'csv':
                 rows = [['ID', 'NAME', 'EXPIRING DATE', 'BUY PRICE', 'SELL PRICE', 'IN STOCK']]
                 for product in report_data['products']:
                     rows.append([product.id, product.name, product.expiring_date, product.buy_price, product.sell_price, product.quantity])
@@ -140,17 +141,31 @@ class Inventory():
             report_data = self.revenue(from_date, to_date)    
         elif key == 'profits':
             report_data = self.profits(from_date, to_date)
-            if export:
+            if export == 'csv':
                 rows = [['NAME', 'PROFIT']]
                 for product in report_data['products']:
-                    rows.append([report_data['products'][product]['name'], report_data['products'][product]['profit']])
+                    rows.append([report_data['products'][product]['name'], report_data['products'][product]['value']])
         elif key == 'expenses':
             report_data = self.expenses(from_date, to_date)
-        if (key == 'revenue' or key == 'expenses') and export:
+        if (key == 'revenue' or key == 'expenses') and export == 'csv':
             rows = [['NAME', 'QUANTITY', 'VALUE']]
             for product in report_data['products']:
                 rows.append([report_data['products'][product]['name'], report_data['products'][product]['quantity'], report_data['products'][product]['value']])
-        if rows:
+        # here we save a png image containing ploted data if requested by the user
+        if (key == 'revenue' or key == 'expenses' or key == 'profits') and export == 'png' : 
+            x =[]
+            y = []
+            for product in report_data['products']:
+                x.append(report_data['products'][product]['name'])
+                y.append(report_data['products'][product]['value'])
+            fig, ax = plt.subplots() 
+            ax.bar(x, y)
+            ax.set(title=report_data['description'])
+            plt.show()
+            #ax.title(report_data['description'])
+            fig.savefig(os.path.join(self.report_dirpath, f'{key}-{from_date}_{to_date}.png'))
+
+        if rows and os.path.exists(report_path) is False:
             for row in rows:
                 self.write_on_csv(report_path, row)
         return report_data
@@ -213,12 +228,12 @@ class Inventory():
             # movement is a list with indexing: [name,price,quantity,date,id]
             if movement[0] in revenue_data:
                 revenue_data['products'][movement[0]]['quantity'] += movement[2]
-                revenue_data['products'][movement[0]]['value'] += movement[1] * movement[2]
+                revenue_data['products'][movement[0]]['value'] += round((movement[1] * movement[2]),2)
             else:
                 revenue_data['products'][movement[0]] = {
                     'name': movement[0],
                     'quantity': movement[2],
-                    'value': movement[1] * movement[2]}
+                    'value': round((movement[1] * movement[2]),2)}
         revenue_data['tot_value'] = sold_data['tot_value']
         revenue_data['tot_quantity'] = sold_data['tot_quantity']
         q = sold_data['tot_quantity']
@@ -238,12 +253,12 @@ class Inventory():
             # movement is a list with indexing: [name,price,quantity,date,id]
             if movement[1] in expenses_data:
                 expenses_data['products'][movement[0]]['quantity'] += movement[3]
-                expenses_data['products'][movement[0]]['value'] += movement[2] * movement[3]
+                expenses_data['products'][movement[0]]['value'] += round((movement[2] * movement[3]),2)
             else:
                 expenses_data['products'][movement[0]] = {
                     'name': movement[0],
                     'quantity': movement[2],
-                    'value': movement[1] * movement[2]}
+                    'value': round((movement[1] * movement[2]),2)}
         expenses_data['tot_value'] = bought_data['tot_value']
         expenses_data['tot_quantity'] = bought_data['tot_quantity']
         q = bought_data['tot_quantity']
@@ -263,10 +278,10 @@ class Inventory():
         for product in revenue_data['products']:
             profits_data['products'][product] = {
                     'name': product,
-                    'profit':  revenue_data['products'][product]['value'] - expenses_data['products'][product]['value']
+                    'value':  round((revenue_data['products'][product]['value'] - expenses_data['products'][product]['value']),2)
                      }
-        profits_data['tot_profit'] = revenue_data['tot_value'] - expenses_data['tot_value']
-        v = profits_data['tot_profit']
+        profits_data['tot_value'] = round(( revenue_data['tot_value'] - expenses_data['tot_value']),2)
+        v = profits_data['tot_value']
         profits_data['description'] = f'total profits: {v}'
         return profits_data
 
